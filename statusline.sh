@@ -91,7 +91,16 @@ else
     acc_display="98%"
 fi
 
+# Color for context percentage
+if (( $(echo "$ctx_pct < 50" | bc -l) )); then
+    ctx_color='\033[32m'  # Green
+elif (( $(echo "$ctx_pct < 80" | bc -l) )); then
+    ctx_color='\033[33m'  # Yellow
+else
+    ctx_color='\033[31m'  # Red
+fi
+
 # Build status line
 # Format: [Model] folder | In:XXk Out:XXk (XX%) | I:XX D:X.X A:XX%
 dim='\033[90m'
-echo -e "${dim}[${reset}${model}${dim}]${reset} ${folder} ${dim}|${reset} ${dim}In:${reset}${input_fmt} ${dim}Out:${reset}${output_fmt} ${dim}(${reset}${ctx_pct}%${dim})${reset} ${dim}|${reset} ${color}${inst_display} ${density_display} A:${acc_display}${reset}"
+echo -e "${dim}[${reset}${model}${dim}]${reset} ${folder} ${dim}|${reset} ${dim}In:${reset}${input_fmt} ${dim}Out:${reset}${output_fmt} ${dim}[${reset}${ctx_color}${ctx_pct}%${reset}${dim}]${reset} ${dim}|${reset} ${color}${inst_display} ${density_display} A:${acc_display}${reset}"
